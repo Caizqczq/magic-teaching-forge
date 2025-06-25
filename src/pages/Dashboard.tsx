@@ -59,6 +59,10 @@ const Dashboard = () => {
 
   const handleNavigation = (path: string) => {
     navigate(path);
+    toast({
+      title: "导航",
+      description: `正在跳转到 ${path}...`,
+    });
   };
 
   const handleCreateProject = () => {
@@ -74,6 +78,20 @@ const Dashboard = () => {
     toast({
       title: "统计数据",
       description: `您点击了 ${statLabel}`,
+    });
+  };
+
+  const handleKnowledgeBase = () => {
+    toast({
+      title: "知识库",
+      description: "知识库功能正在开发中...",
+    });
+  };
+
+  const handleCommunity = () => {
+    toast({
+      title: "社区",
+      description: "社区功能正在开发中...",
     });
   };
 
@@ -95,12 +113,22 @@ const Dashboard = () => {
               <nav className="hidden md:flex space-x-6">
                 <button 
                   onClick={() => handleNavigation('/dashboard')}
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                  className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
                 >
                   项目
                 </button>
-                <button className="text-gray-600 hover:text-gray-900 transition-colors">知识库</button>
-                <button className="text-gray-600 hover:text-gray-900 transition-colors">社区</button>
+                <button 
+                  onClick={handleKnowledgeBase}
+                  className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+                >
+                  知识库
+                </button>
+                <button 
+                  onClick={handleCommunity}
+                  className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
+                >
+                  社区
+                </button>
               </nav>
             </div>
             <div className="flex items-center space-x-4">
