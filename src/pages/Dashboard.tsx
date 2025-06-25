@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, BookOpen, Clock, Users, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -51,10 +51,30 @@ const Dashboard = () => {
     } else {
       navigate(`/project/${projectId}`);
     }
+    toast({
+      title: "打开项目",
+      description: `正在打开项目 ${projectId}...`,
+    });
   };
 
   const handleNavigation = (path: string) => {
     navigate(path);
+  };
+
+  const handleCreateProject = () => {
+    console.log('创建新项目按钮被点击');
+    toast({
+      title: "创建新项目",
+      description: "正在进入创建向导...",
+    });
+    navigate('/create');
+  };
+
+  const handleStatClick = (statLabel: string) => {
+    toast({
+      title: "统计数据",
+      description: `您点击了 ${statLabel}`,
+    });
   };
 
   return (
@@ -94,7 +114,11 @@ const Dashboard = () => {
         {/* 统计卡片 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card 
+              key={index} 
+              className="hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => handleStatClick(stat.label)}
+            >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -110,16 +134,16 @@ const Dashboard = () => {
 
         {/* 创建新项目按钮 */}
         <div className="text-center mb-12">
-          <div className="relative">
+          <div className="relative inline-block">
             <Button 
-              onClick={() => navigate('/create')}
+              onClick={handleCreateProject}
               size="lg"
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+              className="relative z-10 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-12 py-6 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
             >
               <Plus className="mr-3 h-6 w-6" />
               创建新的教学设计
             </Button>
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25 animate-pulse"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur opacity-25 animate-pulse pointer-events-none"></div>
           </div>
           <p className="text-gray-600 mt-4 text-lg">让AI为您生成专业的教学资源</p>
         </div>
