@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import CreateWizard from "./pages/CreateWizard";
 import ProjectDetail from "./pages/ProjectDetail";
 import Analytics from "./pages/Analytics";
+import KnowledgeBase from "./pages/KnowledgeBase";
+import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +27,8 @@ const App = () => (
           <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/project/demo" element={<ProjectDetail />} />
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/knowledge" element={<KnowledgeBase />} />
+          <Route path="/community" element={<Community />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
