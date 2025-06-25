@@ -45,6 +45,18 @@ const Dashboard = () => {
     { label: "教学效果", value: "92%", icon: TrendingUp, color: "text-orange-600" }
   ];
 
+  const handleProjectClick = (projectId: number) => {
+    if (projectId === 1) {
+      navigate('/project/demo');
+    } else {
+      navigate(`/project/${projectId}`);
+    }
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* 顶部导航栏 */}
@@ -52,7 +64,7 @@ const Dashboard = () => {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">魔</span>
                 </div>
@@ -61,13 +73,18 @@ const Dashboard = () => {
                 </h1>
               </div>
               <nav className="hidden md:flex space-x-6">
-                <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">项目</a>
-                <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">知识库</a>
-                <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">社区</a>
+                <button 
+                  onClick={() => handleNavigation('/dashboard')}
+                  className="text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                  项目
+                </button>
+                <button className="text-gray-600 hover:text-gray-900 transition-colors">知识库</button>
+                <button className="text-gray-600 hover:text-gray-900 transition-colors">社区</button>
               </nav>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+              <div className="w-8 h-8 bg-gray-300 rounded-full cursor-pointer hover:bg-gray-400 transition-colors"></div>
             </div>
           </div>
         </div>
@@ -77,7 +94,7 @@ const Dashboard = () => {
         {/* 统计卡片 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
+            <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -118,7 +135,11 @@ const Dashboard = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {recentProjects.map((project) => (
-              <Card key={project.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer">
+              <Card 
+                key={project.id} 
+                className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+                onClick={() => handleProjectClick(project.id)}
+              >
                 <div className="relative overflow-hidden rounded-t-lg">
                   <img 
                     src={project.thumbnail} 
@@ -127,7 +148,15 @@ const Dashboard = () => {
                   />
                   <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity"></div>
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white">
+                    <Button 
+                      size="sm" 
+                      variant="secondary" 
+                      className="bg-white/90 hover:bg-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleProjectClick(project.id);
+                      }}
+                    >
                       打开
                     </Button>
                   </div>
@@ -169,7 +198,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
                   <h4 className="font-medium text-gray-900 mb-2">化学实验安全指南</h4>
                   <p className="text-sm text-gray-600 mb-2">适用于高中化学教学</p>
                   <div className="flex items-center text-xs text-gray-500">
@@ -177,7 +206,7 @@ const Dashboard = () => {
                     <span className="ml-2">1.2k 下载</span>
                   </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
                   <h4 className="font-medium text-gray-900 mb-2">古诗词情感分析</h4>
                   <p className="text-sm text-gray-600 mb-2">创新的语文教学方法</p>
                   <div className="flex items-center text-xs text-gray-500">
@@ -185,7 +214,7 @@ const Dashboard = () => {
                     <span className="ml-2">956 下载</span>
                   </div>
                 </div>
-                <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
                   <h4 className="font-medium text-gray-900 mb-2">几何图形可视化</h4>
                   <p className="text-sm text-gray-600 mb-2">互动式数学教学工具</p>
                   <div className="flex items-center text-xs text-gray-500">

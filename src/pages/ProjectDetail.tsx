@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Download, 
   Share2, 
@@ -14,13 +13,14 @@ import {
   ArrowLeft,
   Eye,
   MoreHorizontal,
-  Trash2,
   Copy
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const ProjectDetail = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedFile, setSelectedFile] = useState('lesson_plan');
   
   const projectFiles = [
@@ -128,6 +128,31 @@ const ProjectDetail = () => {
 
   const selectedFileData = projectFiles.find(file => file.id === selectedFile);
 
+  const handleFileSelect = (fileId: string) => {
+    setSelectedFile(fileId);
+  };
+
+  const handleDownload = (fileName: string) => {
+    toast({
+      title: "下载开始",
+      description: `正在下载 ${fileName}...`,
+    });
+  };
+
+  const handleCopy = () => {
+    toast({
+      title: "复制成功",
+      description: "内容已复制到剪贴板",
+    });
+  };
+
+  const handleShare = () => {
+    toast({
+      title: "分享成功",
+      description: "项目已分享到社区",
+    });
+  };
+
   const renderPreview = () => {
     if (!selectedFileData) return null;
 
@@ -148,7 +173,7 @@ const ProjectDetail = () => {
             <h2 className="text-2xl font-bold mb-4">{selectedFileData.preview.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {selectedFileData.preview.slides.map((slide, index) => (
-                <Card key={index} className="p-4 bg-gradient-to-br from-blue-50 to-purple-50">
+                <Card key={index} className="p-4 bg-gradient-to-br from-blue-50 to-purple-50 cursor-pointer hover:shadow-md transition-shadow">
                   <div className="text-center">
                     <h3 className="font-bold text-lg mb-2">{slide.title}</h3>
                     {slide.subtitle && (
@@ -170,11 +195,11 @@ const ProjectDetail = () => {
             <h2 className="text-2xl font-bold mb-4">{selectedFileData.preview.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {selectedFileData.preview.images.map((image, index) => (
-                <Card key={index} className="overflow-hidden">
+                <Card key={index} className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow">
                   <img 
                     src={image.url} 
                     alt={image.name}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform"
                   />
                   <CardContent className="p-3">
                     <p className="font-medium text-center">{image.name}</p>
@@ -190,7 +215,7 @@ const ProjectDetail = () => {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold mb-4">{selectedFileData.preview.title}</h2>
             {selectedFileData.preview.questions.map((question, index) => (
-              <Card key={index}>
+              <Card key={index} className="hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-lg">
                     题目 {index + 1} ({question.type})
@@ -240,11 +265,19 @@ const ProjectDetail = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => handleDownload('全部文件')}
+              >
                 <Download className="mr-2 h-4 w-4" />
                 全部下载
               </Button>
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleShare}
+              >
                 <Share2 className="mr-2 h-4 w-4" />
                 分享到社区
               </Button>
@@ -278,7 +311,7 @@ const ProjectDetail = () => {
                       ? 'bg-purple-50 border border-purple-200'
                       : 'hover:bg-gray-50'
                   }`}
-                  onClick={() => setSelectedFile(file.id)}
+                  onClick={() => handleFileSelect(file.id)}
                 >
                   <file.icon className={`h-5 w-5 ${
                     selectedFile === file.id ? 'text-purple-600' : 'text-gray-500'
@@ -292,7 +325,15 @@ const ProjectDetail = () => {
                     <p className="text-xs text-gray-500">{file.size}</p>
                   </div>
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-6 w-6 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDownload(file.name);
+                      }}
+                    >
                       <MoreHorizontal className="h-3 w-3" />
                     </Button>
                   </div>
@@ -314,11 +355,19 @@ const ProjectDetail = () => {
                     <Eye className="mr-2 h-4 w-4" />
                     预览
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => selectedFileData && handleDownload(selectedFileData.name)}
+                  >
                     <Download className="mr-2 h-4 w-4" />
                     下载
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={handleCopy}
+                  >
                     <Copy className="mr-2 h-4 w-4" />
                     复制
                   </Button>

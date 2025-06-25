@@ -1,14 +1,16 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { ArrowLeft, TrendingUp, Users, Brain, Target, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const Analytics = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   // 模拟数据
   const difficultyData = [
@@ -64,6 +66,28 @@ const Analytics = () => {
     { text: '化学方程式', size: 12, count: 4 }
   ];
 
+  const handleOptimize = (insightTitle: string) => {
+    toast({
+      title: "开始优化",
+      description: `正在针对"${insightTitle}"进行智能优化...`,
+    });
+    
+    // 模拟优化过程
+    setTimeout(() => {
+      toast({
+        title: "优化完成",
+        description: "教学内容已优化，请查看项目详情页面。",
+      });
+    }, 2000);
+  };
+
+  const handleWordClick = (word: string) => {
+    toast({
+      title: "关键词详情",
+      description: `"${word}"相关的学生疑问有${Math.floor(Math.random() * 20 + 5)}条`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 顶部导航 */}
@@ -91,7 +115,7 @@ const Analytics = () => {
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-8">
         {/* 核心指标卡片 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+          <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 cursor-pointer hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -104,7 +128,7 @@ const Analytics = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+          <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200 cursor-pointer hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -117,7 +141,7 @@ const Analytics = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
+          <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200 cursor-pointer hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -130,7 +154,7 @@ const Analytics = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-orange-50 to-orange-100 border-orange-200">
+          <Card className="bg-gradient-to-r from-orange-50 to-orange-100 border-orange-200 cursor-pointer hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -146,7 +170,7 @@ const Analytics = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* 知识点难点排行 */}
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <TrendingUp className="mr-2 h-5 w-5 text-red-500" />
@@ -168,7 +192,7 @@ const Analytics = () => {
           </Card>
 
           {/* 学生参与度分布 */}
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Users className="mr-2 h-5 w-5 text-blue-500" />
@@ -197,7 +221,7 @@ const Analytics = () => {
               </ResponsiveContainer>
               <div className="flex justify-center space-x-6 mt-4">
                 {engagementData.map((item, index) => (
-                  <div key={index} className="flex items-center">
+                  <div key={index} className="flex items-center cursor-pointer hover:opacity-80">
                     <div 
                       className="w-3 h-3 rounded-full mr-2"
                       style={{ backgroundColor: item.color }}
@@ -211,7 +235,7 @@ const Analytics = () => {
         </div>
 
         {/* 学习进度趋势 */}
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <CardTitle className="flex items-center">
               <TrendingUp className="mr-2 h-5 w-5 text-green-500" />
@@ -239,7 +263,7 @@ const Analytics = () => {
         </Card>
 
         {/* 学生疑问词云 */}
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <CardTitle>学生疑问热词</CardTitle>
             <CardDescription>基于AI助教的问答记录生成</CardDescription>
@@ -249,12 +273,13 @@ const Analytics = () => {
               {questionCloud.map((word, index) => (
                 <span
                   key={index}
-                  className="inline-block px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full text-center cursor-pointer hover:shadow-md transition-all"
+                  className="inline-block px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full text-center cursor-pointer hover:shadow-md transition-all hover:scale-110"
                   style={{ 
                     fontSize: `${word.size}px`,
                     color: `hsl(${240 + index * 30}, 70%, 50%)`,
                     fontWeight: Math.min(700, 400 + word.count * 20)
                   }}
+                  onClick={() => handleWordClick(word.text)}
                 >
                   {word.text}
                 </span>
@@ -264,7 +289,7 @@ const Analytics = () => {
         </Card>
 
         {/* AI智能洞察与建议 */}
-        <Card>
+        <Card className="hover:shadow-lg transition-shadow">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Brain className="mr-2 h-5 w-5 text-purple-500" />
@@ -294,6 +319,7 @@ const Analytics = () => {
                   <Button 
                     size="sm"
                     className="ml-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                    onClick={() => handleOptimize(insight.title)}
                   >
                     一键优化
                   </Button>
