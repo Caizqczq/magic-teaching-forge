@@ -20,12 +20,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      getCurrentUser();
-    } else {
-      setLoading(false);
-    }
+    // 直接尝试获取当前用户信息，Session认证会自动处理
+    getCurrentUser();
   }, []);
 
   const getCurrentUser = async () => {
@@ -36,7 +32,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
     } catch (error) {
       console.error('获取用户信息失败:', error);
-      localStorage.removeItem('auth_token');
+      // Session认证下无需清理localStorage
     } finally {
       setLoading(false);
     }
@@ -46,7 +42,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const response = await apiService.login({ email, password });
       if (response.success) {
-        localStorage.setItem('auth_token', response.data.token);
         setUser(response.data.user);
         toast({
           title: "登录成功",
@@ -69,7 +64,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const response = await apiService.register({ username, email, password });
       if (response.success) {
-        localStorage.setItem('auth_token', response.data.token);
         setUser(response.data.user);
         toast({
           title: "注册成功",
@@ -94,7 +88,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } catch (error) {
       console.error('登出API调用失败:', error);
     } finally {
-      localStorage.removeItem('auth_token');
       setUser(null);
       toast({
         title: "已退出登录",

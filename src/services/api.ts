@@ -8,14 +8,12 @@ class ApiService {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const token = localStorage.getItem('auth_token');
-    
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
         ...options.headers,
       },
+      credentials: 'include', // 自动携带Cookie
       ...options,
     };
 
@@ -35,14 +33,14 @@ class ApiService {
   }
 
   // 认证相关
-  async login(credentials: LoginRequest): Promise<ApiResponse<{ user: User; token: string }>> {
+  async login(credentials: LoginRequest): Promise<ApiResponse<{ user: User }>> {
     return this.request('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
   }
 
-  async register(userData: RegisterRequest): Promise<ApiResponse<{ user: User; token: string }>> {
+  async register(userData: RegisterRequest): Promise<ApiResponse<{ user: User }>> {
     return this.request('/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData),
@@ -99,9 +97,7 @@ class ApiService {
 
   async downloadResource(resourceId: string): Promise<Blob> {
     const response = await fetch(`${API_BASE_URL}/resources/${resourceId}/download`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-      },
+      credentials: 'include', // 自动携带Cookie
     });
     return response.blob();
   }
@@ -134,9 +130,7 @@ class ApiService {
 
   async downloadKnowledgeItem(id: string): Promise<Blob> {
     const response = await fetch(`${API_BASE_URL}/knowledge/${id}/download`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-      },
+      credentials: 'include', // 自动携带Cookie
     });
     return response.blob();
   }
