@@ -24,16 +24,30 @@ const StatsCards = () => {
       {stats.map((stat, index) => (
         <Card 
           key={index} 
-          className="hover:shadow-lg transition-shadow cursor-pointer"
+          className="hover-lift cursor-pointer transition-all duration-300 group animate-fade-in focus-ring"
           onClick={() => handleStatClick(stat.label)}
+          style={{ animationDelay: `${index * 0.1}s` }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleStatClick(stat.label);
+            }
+          }}
+          aria-label={`查看${stat.label}详情`}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
-                <p className="text-2xl font-bold">{stat.value}</p>
+                <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+                <p className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+                  {stat.value}
+                </p>
               </div>
-              <stat.icon className={`h-8 w-8 ${stat.color}`} />
+              <div className={`p-2 rounded-lg bg-muted/50 group-hover:bg-primary/10 transition-colors`}>
+                <stat.icon className={`h-6 w-6 ${stat.color} group-hover:scale-110 transition-transform`} />
+              </div>
             </div>
           </CardContent>
         </Card>
