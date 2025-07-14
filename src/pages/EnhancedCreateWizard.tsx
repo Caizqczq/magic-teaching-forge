@@ -525,3 +525,5 @@ export const EnhancedCreateWizard: React.FC = () => {
     </div>
   );
 };
+
+export default EnhancedCreateWizard;

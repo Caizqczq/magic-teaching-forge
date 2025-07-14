@@ -12,6 +12,7 @@ import { LazyRoute } from "@/components/common/LazyRoute";
 // Lazy load pages for better performance
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const CreateWizard = React.lazy(() => import("./pages/CreateWizard"));
+const EnhancedCreateWizard = React.lazy(() => import("./pages/EnhancedCreateWizard"));
 const ProjectDetail = React.lazy(() => import("./pages/ProjectDetail"));
 const Analytics = React.lazy(() => import("./pages/Analytics"));
 const KnowledgeBase = React.lazy(() => import("./pages/KnowledgeBase"));
@@ -54,6 +55,11 @@ const App = () => (
               <Route path="/create" element={
                 <LazyRoute>
                   <CreateWizard />
+                </LazyRoute>
+              } />
+              <Route path="/enhanced-create" element={
+                <LazyRoute>
+                  <EnhancedCreateWizard />
                 </LazyRoute>
               } />
               <Route path="/project/:id" element={
