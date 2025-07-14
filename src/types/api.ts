@@ -37,7 +37,7 @@ export interface Project {
   subject: string;
   grade: string;
   style: 'professional' | 'interactive' | 'inspiring';
-  sourceType: 'topic' | 'text' | 'url' | 'file';
+  sourceType: 'topic' | 'text' | 'url' | 'file' | 'image' | 'audio';
   sourceContent: string;
   outputs: string[];
   status: 'draft' | 'generating' | 'completed' | 'failed';
@@ -46,6 +46,13 @@ export interface Project {
   createdAt: string;
   updatedAt: string;
   thumbnail?: string;
+  aiGeneratedContent?: {
+    chatHistory?: ChatMessage[];
+    generatedImages?: string[];
+    analyzedContent?: string;
+    searchResults?: string;
+    summaryContent?: string;
+  };
 }
 
 export interface CreateProjectRequest {
@@ -143,4 +150,37 @@ export interface Comment {
   likes: number;
   isLiked: boolean;
   createdAt: string;
+}
+
+// AI功能相关类型
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+}
+
+export interface AIModel {
+  model: string;
+  desc: string;
+}
+
+export interface AICapability {
+  id: string;
+  name: string;
+  description: string;
+  category: 'chat' | 'image' | 'audio' | 'search' | 'tools' | 'rag';
+  isAvailable: boolean;
+}
+
+export interface GenerationTask {
+  id: string;
+  projectId: string;
+  type: 'lesson_plan' | 'ppt' | 'images' | 'quiz' | 'audio' | 'video';
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  progress: number;
+  result?: any;
+  errorMessage?: string;
+  createdAt: string;
+  updatedAt: string;
 }
